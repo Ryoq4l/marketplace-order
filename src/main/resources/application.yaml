@@ -36,3 +36,6 @@ feign:
         connectTimeout: 5000
         readTimeout: 5000
         loggerLevel: basic
+app:
+  mock-seller-id: 00000000-0000-0000-0000-000000000001
+  trade-protection-minutes: 1
