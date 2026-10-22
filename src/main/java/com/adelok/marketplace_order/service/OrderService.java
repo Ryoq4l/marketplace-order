@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -104,16 +105,13 @@ public class OrderService {
     }
 
     public void sell(SellOrderRequest request) {
-        HoldRequest holdRequest = new HoldRequest(request.price(), UUID.randomUUID(), "Sell skin");
+        BigDecimal buyoutPrice = catalogClient.sellToSystem(request.userItemId(), request.sellerId());
         Order order = Order.builder()
                 .sellerId(request.sellerId())
-                .price(request.price())
+                .price(buyoutPrice) // <-- Записываем цену!
                 .status(OrderStatus.PENDING_SELL)
                 .holdExpiresAt(LocalDateTime.now().plusMinutes(tradeProtectionMinutes))
                 .build();
         orderRepository.save(order);
-        HoldRequest hold = new HoldRequest(request.price(), order.getId(), "Sell skin");
-        walletClient.hold(hold, request.sellerId());
-        catalogClient.sellToSystem(request.userItemId(), request.sellerId(), request.price());
     }
 }

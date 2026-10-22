@@ -17,7 +17,7 @@ public class OrderController {
 
     @PostMapping
     public void buy(@RequestBody CreateOrderRequest request) {
-        System.out.println("DEBUG Request: " + request); // Проверим, что пришло
+        System.out.println("DEBUG Request: " + request);
         orderService.buy(request);
     }
     @PostMapping("/sell")

@@ -25,9 +25,5 @@ public interface CatalogClient {
     void cancelReservation(@PathVariable("id") UUID id);
 
     @PostMapping("/api/v1/items/sell-to-system")
-    void sellToSystem(
-            @RequestParam("userItemId") UUID userItemId,
-            @RequestParam("sellerId") UUID sellerId,
-            @RequestParam("price") BigDecimal price
-    );
+    BigDecimal sellToSystem(@RequestParam("userItemId") UUID userItemId, @RequestParam("sellerId") UUID sellerId);
 }
