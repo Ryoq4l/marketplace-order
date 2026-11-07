@@ -30,7 +30,7 @@ public class OrderScheduler {
 
         for (Order order : expiredOrders) {
             try {
-                DepositRequest request = new DepositRequest(order.getPrice(), "Trade protection expired");
+                DepositRequest request = new DepositRequest(order.getPrice(), order.getId(), "Trade protection expired");
                 walletClient.deposit(request, order.getSellerId());
 
                 order.setStatus(OrderStatus.COMPLETED);

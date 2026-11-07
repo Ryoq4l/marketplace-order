@@ -7,16 +7,9 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record ReleaseRequest(
-        @Positive
-        @NotNull
         BigDecimal amount,
-
-        @NotNull
         UUID sellerId,
-
-        @NotNull
         UUID dealId,
-
         String description
 ) {
 }

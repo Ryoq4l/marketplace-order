@@ -2,6 +2,7 @@ package com.adelok.marketplace_order.client;
 
 import com.adelok.marketplace_order.dto.wallet.*;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +11,9 @@ import java.util.UUID;
 
 @FeignClient(name = "marketplace-wallet")
 public interface WalletClient {
+    @GetMapping("/api/v1/wallets/user/{userId}")
+    WalletResponse getWalletByUserId(@PathVariable("userId") UUID userId);
+
     @PostMapping("/api/v1/wallets/user/{userId}/complete")
     void complete(@RequestBody CompleteRequest request, @PathVariable("userId")UUID userId);
 

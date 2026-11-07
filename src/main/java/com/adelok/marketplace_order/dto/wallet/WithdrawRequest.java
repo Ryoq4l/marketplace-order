@@ -4,12 +4,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public record WithdrawRequest(
-        @Positive
-        @NotNull
         BigDecimal amount,
-
+        UUID dealId,
         String description
 ) {
 }

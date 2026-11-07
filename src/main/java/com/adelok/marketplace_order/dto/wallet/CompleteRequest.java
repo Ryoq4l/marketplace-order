@@ -7,13 +7,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record CompleteRequest(
-        @Positive
-        @NotNull
         BigDecimal amount,
-
-        @NotNull
         UUID dealId,
-
         String description
 ) {
 }

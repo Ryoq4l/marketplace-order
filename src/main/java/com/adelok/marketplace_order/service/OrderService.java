@@ -10,6 +10,7 @@ import com.adelok.marketplace_order.entity.Order;
 import com.adelok.marketplace_order.entity.enumerated.OrderStatus;
 import com.adelok.marketplace_order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -82,7 +83,7 @@ public class OrderService {
         catalogClient.markAsReserved(listing.id());
 
         try {
-            WithdrawRequest withdrawRequest = new WithdrawRequest(listing.price(), "Bought");
+            WithdrawRequest withdrawRequest = new WithdrawRequest(listing.price(), order.getId(), "Bought");
             walletClient.withdraw(withdrawRequest, request.buyerId());
 
             catalogClient.markAsSold(request.listingId(), request.buyerId());
@@ -90,14 +91,13 @@ public class OrderService {
             order.setStatus(OrderStatus.COMPLETED);
             orderRepository.save(order);
         } catch (Exception e1) {
-            e1.printStackTrace();
+            log.error("Failed to buy listing {}. Error: {}", listing.id(), e1.getMessage(), e1);
             try {
                 catalogClient.cancelReservation(listing.id());
                 RefundRequest refundRequest = new RefundRequest(listing.price(), order.getId(), "Refund");
                 walletClient.refund(refundRequest, request.buyerId());
             } catch (Exception e2) {
-                System.err.println("Compensation failed: " + e2.getMessage());
-            }
+                log.error("Compensation failed for order {}. Error: {}", order.getId(), e2.getMessage(), e2);            }
             order.setStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Payment failed");
