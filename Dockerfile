@@ -1,5 +1,6 @@
 # Stage 1: Build
 FROM maven:3.9.6-eclipse-temurin-21 AS build
+ARG GITHUB_TOKEN
 WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
