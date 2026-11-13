@@ -1,13 +1,11 @@
 spring:
-  config:
-    import: optional:file:.env[.properties]
   application:
     name: marketplace-order
 
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:order_db}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${DB_USER:market_user}
-    password: ${DB_PASSWORD:market_pass}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -18,8 +16,10 @@ spring:
       hibernate:
         format_sql: true
     open-in-view: false
+
 jwt:
-  secret: ${JWT_SECRET:dev-only-secret-change-me-in-production-1234567890abcdef}
+  secret: ${JWT_SECRET}
+
 server:
   port: 8084
 
@@ -32,6 +32,7 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
+
 feign:
   client:
     config:
@@ -39,6 +40,7 @@ feign:
         connectTimeout: 5000
         readTimeout: 5000
         loggerLevel: basic
+
 app:
   mock-seller-id: 00000000-0000-0000-0000-000000000001
   trade-protection-minutes: 1
